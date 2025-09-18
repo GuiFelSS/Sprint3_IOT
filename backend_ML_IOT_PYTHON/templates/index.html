@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Pátio - Mottu</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 20px; }
+        h1 { text-align: center; color: #333; }
+        #patio-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .vaga {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .vaga.livre {
+            background-color: #e8f5e9; /* Verde claro */
+            border-color: #a5d6a7;
+        }
+        .vaga.ocupada {
+            background-color: #ffcdd2; /* Vermelho claro */
+            border-color: #ef9a9a;
+        }
+        .vaga h3 { margin-top: 0; color: #555; }
+        .vaga p { margin: 5px 0; color: #777; font-size: 0.9em; }
+        .vaga .placa { font-weight: bold; color: #000; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+    <h1>Monitoramento do Pátio Mottu em Tempo Real</h1>
+    <div id="patio-container">
+        </div>
+
+    <script>
+        // Função para buscar os dados da API e atualizar o dashboard
+        async function atualizarDashboard() {
+            try {
+                const response = await fetch('/status_patio');
+                const vagas = await response.json();
+                const container = document.getElementById('patio-container');
+
+                // Limpa o container antes de adicionar os dados atualizados
+                container.innerHTML = '';
+
+                // Ordena as vagas pelo ID para manter uma ordem consistente
+                vagas.sort((a, b) => a.id_vaga.localeCompare(b.id_vaga));
+
+                if (vagas.length === 0) {
+                    container.innerHTML = '<p>Aguardando dados das vagas...</p>';
+                }
+
+                // Cria um card para cada vaga
+                vagas.forEach(vaga => {
+                    const vagaDiv = document.createElement('div');
+                    vagaDiv.className = 'vaga ' + vaga.status;
+
+                    let content = `<h3>${vaga.id_vaga.replace('_', ' ').toUpperCase()}</h3>`;
+
+                    if (vaga.status === 'ocupada') {
+                        content += `<p class="placa">${vaga.placa_ml || 'Lendo placa...'}</p>`;
+                        content += `<p>${vaga.tipo_moto_ml || 'Identificando...'}</p>`;
+                        content += `<p>Moto ID: ${vaga.moto_id || 'N/A'}</p>`;
+                    } else {
+                        content += `<p style="color: green; font-weight: bold;">LIVRE</p>`;
+                    }
+
+                    vagaDiv.innerHTML = content;
+                    container.appendChild(vagaDiv);
+                });
+
+            } catch (error) {
+                console.error("Erro ao buscar dados do pátio:", error);
+                document.getElementById('patio-container').innerHTML = '<p>Erro ao conectar com o backend.</p>';
+            }
+        }
+
+        // Atualiza o dashboard a cada 3 segundos (3000 milissegundos)
+        setInterval(atualizarDashboard, 3000);
+
+        // Chama a função uma vez no início para carregar os dados imediatamente
+        window.onload = atualizarDashboard;
+    </script>
+
+</body>
+</html>
