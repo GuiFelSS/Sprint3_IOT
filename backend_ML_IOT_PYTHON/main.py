@@ -52,9 +52,8 @@ def on_message(client, userdata, message):
 
         if status == "ocupada":
             print(f"  Vaga OCUPADA pela moto IoT ID: {moto_id}.")
-            caminho_imagem_simulado = "path/to/image.jpg"
-            tipo_moto = identificar_tipo_moto(caminho_imagem_simulado)
-            placa = reconhecer_placa(caminho_imagem_simulado)
+            tipo_moto = identificar_tipo_moto(moto_id)
+            placa = reconhecer_placa("path/to/image.jpg")
             print(f"  [ML] Tipo de Moto Identificado: {tipo_moto}")
             print(f"  [ML] Placa Reconhecida: {placa}")
         else:
@@ -87,15 +86,9 @@ thread.start()
 # --- Servidor Flask ---
 app = Flask(__name__)
 
-# ==========================================================
-# ===== CÓDIGO ADICIONADO AQUI =============================
-# ==========================================================
-# Esta é a rota principal que vai carregar e mostrar o seu dashboard visual
 @app.route('/')
 def index():
     return render_template('index.html')
-# ==========================================================
-# ==========================================================
 
 
 # Esta é a sua API, que o dashboard usa para pegar os dados
