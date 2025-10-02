@@ -115,3 +115,20 @@ backend_challenge2025/
 ├── Leitura_Placas.ipynb        # Notebook para desenvolvimento do OCR de placas
 └── modelo_da_entrega2_Challenge2025.ipynb # Notebook do modelo de classificação de motos
 ```
+## IMAGENS
+
+### DISPOSITIVO IoT funcionando
+<div align="center">
+  <img src="/imagens/Captura de tela 2025-10-01 210249.png" alt="DISPOSITIVO IoT"/>
+</div>
+
+### Atualização em tempo real
+### Vaga ocupada
+<div align="center">
+  <img src="/imagens/Captura de tela 2025-10-01 210331.png" alt="Vaga ocupada"/>
+</div>
+
+### Vaga livre
+<div align="center">
+  <img src="/imagens/Captura de tela 2025-10-01 210346.png" alt="Vaga livre"/>
+</div>
